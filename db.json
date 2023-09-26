@@ -1,0 +1,51 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "scs",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "scccs",
+      "completed": false
+    },
+    {
+      "id": 8,
+      "title": "cdc",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "title": "scs",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "title": " d dcdcd",
+      "completed": false
+    }
+  ],
+  "completed": [
+    {
+      "id": 3,
+      "title": "scs",
+      "completed": false
+    },
+    {
+      "id": 10,
+      "title": "cdc",
+      "completed": false
+    },
+    {
+      "id": 9,
+      "title": "scd",
+      "completed": false
+    },
+    {
+      "id": 56,
+      "title": "56c",
+      "completed": false
+    }
+  ]
+}

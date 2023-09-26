@@ -1,0 +1,50 @@
+.main {
+  position: relative;
+  display: flex;
+  align-self: flex-start  ;
+  top: 0;
+  left: -112px;
+  width: 100%;
+  height: 100rem;
+}
+
+/* .main{
+  display: flex;
+  align-self: flex-start  ;
+ } */
+ .main > div {
+  margin-left:12%;  
+}
+
+
+.todo{
+  margin-left: 3%;
+  background: rgba( 255, 255, 255, 0.3 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  width: 50%;
+  text-align: center;
+  height: fit-content;
+}
+
+.Items{
+  margin-left: 3%;
+  margin-bottom: 15px;
+  background: rgba( 255, 255, 255, 0.3 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  width: 50%;
+  text-align: center;
+  height: fit-content;
+ 
+}
+.button{
+  flex: auto;
+  background-color: rgb(202, 106, 37);
+  }
