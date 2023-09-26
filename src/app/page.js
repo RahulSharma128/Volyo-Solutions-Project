@@ -3,7 +3,8 @@
 import { useState, useEffect} from 'react'
 import axios from 'axios';
 import styles from './page.module.css';
-
+import handleAddClick from 'pages/AddCard.js';
+import handleDeleteClick from 'pages/DeleteCard.js';
 
 const Home = () => {
   const [formState, setFormState] = useState({
@@ -32,92 +33,13 @@ const Home = () => {
     }
   };
 
-  //call back hell
-  // useEffect(() => {
-  //   fetchUncompletedTasks();
-  //   fetchCompletedTasks();
-  // });
-
-
-  // use this if not working
   useEffect(() => {
     fetchUncompletedTasks();
     fetchCompletedTasks();
   }, []);
 
-  const handleAddClick = async () => {
-    // Values from  formState
-    const newID = formState.ID;
-    const newTitle = formState.Title;
 
-    // Create a new todo object
-    const newTodo = {
-      id: Number(newID),
-      title: newTitle,
-      completed: false,
-    };
-
-    if (!newID || newID.trim() === "") {
-      alert("Please Enter Task Id");
-      return;
-    }
   
-    try {
-    // logic to get all the array ids
-    var arr1 = await axios.get('http://localhost:3001/todos');
-    var arr2 = await axios.get('http://localhost:3001/completed');
-    const idsArray1 = arr1.data.map(item => item.id);
-    const idsArray2 = arr2.data.map(item => item.id);
-    const idsArray=[...idsArray1,...idsArray2];
-    console.log(idsArray);
-
-    if (!idsArray.includes(Number(newID))){
-    // Send a POST request to add the new task to your local JSON server
-    await axios.post('http://localhost:3001/todos', newTodo);
-    }else{
-    alert("This ID is already exists");
-    return;
-}
-//  input fields
-      setFormState({
-        ID: '',
-        Title: '',
-      });
-
-      // Refresh the task lists
-      fetchUncompletedTasks();
-      fetchCompletedTasks();
-    } catch (error) {
-      console.error('Error adding a new task:', error);
-    }
-    
-  };
-  const handleDeleteClick = async (taskId, isCompleted) => {
-    if (isCompleted) {
-    try {
-      // Send a DELETE request to remove the task with the given ID
-      await axios.delete(`http://localhost:3001/todos/${taskId}`);
-
-      // Refresh the task lists
-      fetchUncompletedTasks();
-      fetchCompletedTasks();
-    } catch (error) {
-      console.error(`Error deleting task with ID ${taskId}:`, error);
-    }
-  }else{
-      try {
-        // Send a DELETE request to remove the task with the given ID
-        await axios.delete(`http://localhost:3001/completed/${taskId}`);
-  
-        // Refresh the task lists
-        fetchUncompletedTasks();
-        fetchCompletedTasks();
-      } catch (error) {
-        console.error(`Error deleting task with ID ${taskId}:`, error);
-      }
-    
-  }
-}
   const handleMarkClick = async (taskId) => {
     try {
   
