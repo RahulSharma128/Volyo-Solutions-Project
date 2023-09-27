@@ -3,12 +3,12 @@
 import { useState, useEffect} from 'react'
 import axios from 'axios';
 import styles from './page.module.css';
-import handleAddClick from 'pages/AddCard.js';
-import handleDeleteClick from 'pages/DeleteCard.js';
+import handleAddClick from '../../public/handleAddClick';
+import handleDeleteClick from '../../public/handleDeleteClick';
 
 const Home = () => {
   const [formState, setFormState] = useState({
-    ID: '',
+    ID: Date.now(),
     Title: '',
   });
 
@@ -38,24 +38,25 @@ const Home = () => {
     fetchCompletedTasks();
   }, []);
 
+  const handleAddClickWrapper = () => {
+    handleAddClick(formState, setFormState, fetchUncompletedTasks, fetchCompletedTasks);
+  };
 
-  
+  const handleDeleteClickWrapper = (taskId, isCompleted) => {
+    handleDeleteClick(taskId, isCompleted, fetchUncompletedTasks, fetchCompletedTasks);
+  };
+
   const handleMarkClick = async (taskId) => {
     try {
-  
       const res = await axios.get(`http://localhost:3001/todos/${taskId}`);
-
-      // Send a DELETE request to remove the task with the given ID
       await axios.delete(`http://localhost:3001/todos/${taskId}`);
-
       await axios.post('http://localhost:3001/completed', res.data);
- 
       fetchUncompletedTasks();
       fetchCompletedTasks();
     } catch (error) {
-      console.error(`Error deleting task with ID ${taskId}:`, error);
+      console.error(`Error marking task with ID ${taskId} as completed:`, error);
     }
-  }
+  };
 
   return (
     <main className={styles.main}>
@@ -66,39 +67,25 @@ const Home = () => {
           <div key={task.id} className={styles.Items}>
             <p>ID: {task.id}</p>
             <p>Title: {task.title}</p>
-            <button className={styles.button} onClick={() => handleDeleteClick(task.id,true)}>Delete</button>
+            <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}>Delete</button>
             <button className={styles.button} onClick={() => handleMarkClick(task.id)}>Mark As Completed</button>
           </div>
-          
         ))}
       </div>
-  
+
       <div className={styles.todo}>
         <h3>Add Task</h3>
         <br />
-        <div>
-          <label>ID</label>
-          <input
-            type="text"
-            name="id"
-            value={formState.ID}
-            onChange={(e) =>
-              setFormState({ ...formState, ID: e.target.value })
-            }
-          />
-        </div>
         <div>
           <label>Title</label>
           <input
             type="text"
             name="Title"
             value={formState.Title}
-            onChange={(e) =>
-              setFormState({ ...formState, Title: e.target.value })
-            }
+            onChange={(e) => setFormState({ ...formState, Title: e.target.value })}
           />
         </div>
-        <button onClick={handleAddClick}>Add</button>
+        <button onClick={handleAddClickWrapper}>Add</button>
       </div>
       <div className={styles.todo}>
         <h3>Completed Task</h3>
@@ -107,7 +94,7 @@ const Home = () => {
           <div key={task.id} className={styles.Items}>
             <p>ID: {task.id}</p>
             <p>Title: {task.title}</p>
-            <button className={styles.button} onClick={() => handleDeleteClick(task.id,false)}>Delete</button>
+            <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}>Delete</button>
           </div>
         ))}
       </div>
@@ -115,4 +102,6 @@ const Home = () => {
   );
 };
 
+
 export default Home;
+
