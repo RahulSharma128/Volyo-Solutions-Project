@@ -6,11 +6,6 @@
       "completed": false
     },
     {
-      "id": 1695797065983,
-      "title": "Go to the shop",
-      "completed": false
-    },
-    {
       "id": 1695797886085,
       "title": "Complete coding assignment",
       "completed": false
@@ -20,6 +15,11 @@
     {
       "id": 1695797070833,
       "title": "Finish reading a book",
+      "completed": false
+    },
+    {
+      "id": 1695797065983,
+      "title": "Go to the shop",
       "completed": false
     }
   ]

@@ -80,8 +80,7 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <div className={styles.todo}>
-        <h3>Add Task</h3>
-        <br />
+        <h3>Add Task</h3>   <br />
         <div>
           <label>Title</label>
           <textarea placeholder="200 words limit"
@@ -106,8 +105,8 @@ const Home = () => {
               <p className={styles.Time}>Time: {convertTime(task.id).formattedTime}  Date:{convertTime(task.id).formattedDate}</p>
             </div>
             <div className={styles.buttons}> 
-            <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <DeleteIcon /></button>
-            <button className={styles.button} onClick={() => handleMarkClick(task.id)}><Checkbox defaultChecked size="small" /></button>
+            <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}> <DeleteIcon /></div>
+            <div className={styles.button} onClick={() => handleMarkClick(task.id)}><Checkbox defaultChecked size="small" /></div>
          </div>
          </div>
           );
@@ -124,7 +123,7 @@ const Home = () => {
              <p className={styles.Time}> Time: {convertTime(task.id).formattedTime} &nbsp; &nbsp; Date:{convertTime(task.id).formattedDate}</p>
            </div>
            <div className={styles.buttons}> 
-           <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <DeleteIcon /></button>
+           <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <DeleteIcon /></div>
          </div>
          </div>
         ))}
