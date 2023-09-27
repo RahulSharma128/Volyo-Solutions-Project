@@ -5,6 +5,10 @@ import axios from 'axios';
 import styles from './page.module.css';
 import handleAddClick from '../../public/handleAddClick';
 import handleDeleteClick from '../../public/handleDeleteClick';
+import Fab from '@mui/material/Fab';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import Checkbox from "@mui/material/Checkbox";
 
 const convertTime = (timestamp) => {  
   const date = new Date(timestamp);
@@ -87,7 +91,8 @@ const Home = () => {
             onChange={(e) => setFormState({ ...formState, Title: e.target.value })}
           />
         </div>
-        <button onClick={handleAddClickWrapper}>Add</button>
+        <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add">
+        <AddIcon /></Fab></div>
       </div>
       <div className={styles.todo}>
         <h3>Uncompleted Task</h3>
@@ -100,8 +105,9 @@ const Home = () => {
               <p className={styles.Task}> {task.title}</p>
               <p className={styles.Time}>Time: {convertTime(task.id).formattedTime}  Date:{convertTime(task.id).formattedDate}</p>
             </div>
-            <div className={styles.buttons}> <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}>Delete</button>
-            <button className={styles.button} onClick={() => handleMarkClick(task.id)}>Mark As Completed</button>
+            <div className={styles.buttons}> 
+            <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <DeleteIcon /></button>
+            <button className={styles.button} onClick={() => handleMarkClick(task.id)}><Checkbox defaultChecked size="small" /></button>
          </div>
          </div>
           );
@@ -117,8 +123,10 @@ const Home = () => {
              <p className={styles.Task}> {task.title}</p>
              <p className={styles.Time}> Time: {convertTime(task.id).formattedTime} &nbsp; &nbsp; Date:{convertTime(task.id).formattedDate}</p>
            </div>
-            <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}>Delete</button>
-          </div>
+           <div className={styles.buttons}> 
+           <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <DeleteIcon /></button>
+         </div>
+         </div>
         ))}
       </div>
     </main>

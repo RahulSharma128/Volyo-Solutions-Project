@@ -13,19 +13,19 @@
 }
 
 .todo{
+  border-radius: 1%;
   margin-left: 3%;
   background: rgba( 255, 255, 255, 0.3 );
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
   backdrop-filter: blur( 4px );
   -webkit-backdrop-filter: blur( 4px );
-  border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18 );
   width: 50%;
   text-align: center;
   height: fit-content;
 }
 
 .Items{
+  border-radius: 11px;
   display: flex;
   margin-left: 3%;
   margin-bottom: 15px;
@@ -33,7 +33,6 @@
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
   backdrop-filter: blur( 4px );
   -webkit-backdrop-filter: blur( 4px );
-  border-radius: 10px;
   border: 1px solid rgba( 255, 255, 255, 0.18 );
   max-width: 90%;
   text-align: center;
@@ -65,13 +64,15 @@
   padding: 20px;
   font-family: Arial;
   margin: 10px;
-  border-radius: 10px;
+ 
 }
 
 .Time {
-  
-  font-size:small;
-  bottom: 0px;
+  font-size: x-small;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .buttons {
@@ -83,7 +84,8 @@
 
 .button {
   cursor: pointer;
-  border-radius: 10%;
   margin-bottom: 10px;
-  background-color: rgb(202, 106, 37);
+  border: none; 
+  outline: none;
 }
+
