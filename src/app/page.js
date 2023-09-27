@@ -6,6 +6,21 @@ import styles from './page.module.css';
 import handleAddClick from '../../public/handleAddClick';
 import handleDeleteClick from '../../public/handleDeleteClick';
 
+const convertTime = (timestamp) => {  
+  const date = new Date(timestamp);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const formattedDate = `${day}-${month}-${year}`;
+  const formattedTime = `${hours}:${minutes}:${seconds}`;
+  return{
+    formattedDate,formattedTime
+}
+};
+
 const Home = () => {
   const [formState, setFormState] = useState({
     ID: Date.now(),
@@ -61,24 +76,11 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <div className={styles.todo}>
-        <h3>Uncompleted Task</h3>
-        <br />
-        {uncompletedTasks && uncompletedTasks.map((task) => (
-          <div key={task.id} className={styles.Items}>
-            <p>ID: {task.id}</p>
-            <p>Title: {task.title}</p>
-            <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}>Delete</button>
-            <button className={styles.button} onClick={() => handleMarkClick(task.id)}>Mark As Completed</button>
-          </div>
-        ))}
-      </div>
-
-      <div className={styles.todo}>
         <h3>Add Task</h3>
         <br />
         <div>
           <label>Title</label>
-          <input
+          <textarea placeholder="200 words limit"
             type="text"
             name="Title"
             value={formState.Title}
@@ -88,12 +90,33 @@ const Home = () => {
         <button onClick={handleAddClickWrapper}>Add</button>
       </div>
       <div className={styles.todo}>
+        <h3>Uncompleted Task</h3>
+        <br />
+        {uncompletedTasks && uncompletedTasks.map((task,index) => {
+          return(
+          <div key={task.id} className={styles.Items}>
+            <div className={styles.Number}><p>{index+1}</p></div>
+            <div className={styles.Content}>
+              <p className={styles.Task}> {task.title}</p>
+              <p className={styles.Time}>Time: {convertTime(task.id).formattedTime}  Date:{convertTime(task.id).formattedDate}</p>
+            </div>
+            <div className={styles.buttons}> <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}>Delete</button>
+            <button className={styles.button} onClick={() => handleMarkClick(task.id)}>Mark As Completed</button>
+         </div>
+         </div>
+          );
+          })}
+      </div>
+      <div className={styles.todo}>
         <h3>Completed Task</h3>
         <br />
-        {completedTasks && completedTasks.map((task) => (
-          <div key={task.id} className={styles.Items}>
-            <p>ID: {task.id}</p>
-            <p>Title: {task.title}</p>
+        {completedTasks && completedTasks.map((task,index) => (
+           <div key={task.id} className={styles.Items}>
+           <div className={styles.Number}><p>{index+1}</p></div>
+           <div className={styles.Content}>
+             <p className={styles.Task}> {task.title}</p>
+             <p className={styles.Time}> Time: {convertTime(task.id).formattedTime} &nbsp; &nbsp; Date:{convertTime(task.id).formattedDate}</p>
+           </div>
             <button className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}>Delete</button>
           </div>
         ))}
