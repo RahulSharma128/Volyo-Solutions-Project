@@ -5,11 +5,11 @@ import axios from 'axios';
 import styles from './page.module.css';
 import handleAddClick from '../../public/handleAddClick';
 import handleDeleteClick from '../../public/handleDeleteClick';
+import AlertComponent from '../../public/AlertComponent';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCheck, faCircleMinus } from "@fortawesome/free-solid-svg-icons";
-
 
 const convertTime = (timestamp) => {  
   const date = new Date(timestamp);
@@ -26,6 +26,7 @@ const convertTime = (timestamp) => {
 }
 };
 
+
 const Home = () => {
   const [formState, setFormState] = useState({
     ID: Date.now(),
@@ -35,6 +36,12 @@ const Home = () => {
   const [uncompletedTasks, setUncompletedTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
 
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+
+
+  //console.log(uncompletedTasks);
   const fetchUncompletedTasks = async () => {
     try {
       const response = await axios.get('http://localhost:3001/todos');
@@ -55,15 +62,31 @@ const Home = () => {
 
   useEffect(() => {
     fetchUncompletedTasks();
-    fetchCompletedTasks();
+    fetchCompletedTasks()
   }, []);
 
   const handleAddClickWrapper = () => {
+
+    if (!formState.Title) {
+      console.log("Emtyp",formState.Title);
+      setAlertSeverity('error');
+      setAlertMessage('Please Enter Task!');
+      setShowAlert(true);
+      return
+    }
+    else{
     handleAddClick(formState, setFormState, fetchUncompletedTasks, fetchCompletedTasks);
-  };
+    setAlertSeverity('success');
+    setAlertMessage('Task is Succesfully Added');
+    setShowAlert(true);
+    return
+  }};
 
   const handleDeleteClickWrapper = (taskId, isCompleted) => {
     handleDeleteClick(taskId, isCompleted, fetchUncompletedTasks, fetchCompletedTasks);
+    setAlertSeverity('warning');
+    setAlertMessage('Task Deleted!');
+    setShowAlert(true);
   };
 
   const handleMarkClick = async (taskId) => {
@@ -73,6 +96,10 @@ const Home = () => {
       await axios.post('http://localhost:3001/completed', res.data);
       fetchUncompletedTasks();
       fetchCompletedTasks();
+
+      setAlertSeverity('info');
+      setAlertMessage('Task marked as completed!');
+      setShowAlert(true);
     } catch (error) {
       console.error(`Error marking task with ID ${taskId} as completed:`, error);
     }
@@ -80,6 +107,13 @@ const Home = () => {
 
   return (
     <main className={styles.main}>
+          {showAlert && (
+        <AlertComponent
+          severity={alertSeverity}
+          message={alertMessage}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
       <div className={styles.todo}>
         <h3>Add Task</h3> 
         <div>
@@ -91,11 +125,9 @@ const Home = () => {
             onChange={(e) => setFormState({ ...formState, Title: e.target.value })}
           />
         </div>
-        <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add"><br/>
-        <AddIcon /></Fab></div>
-      </div>
+        <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add"><br/><AddIcon /></Fab></div></div>
       <div className={styles.todo}>
-        <h3>Uncompleted Task</h3>
+      <h3>{uncompletedTasks.length > 0 ? `Number of Uncompleted Tasks: ${uncompletedTasks.length}` : 'No Task'}</h3>
         <br />
         {uncompletedTasks && uncompletedTasks.map((task,index) => {
           return(
@@ -129,6 +161,7 @@ const Home = () => {
          </div>
         ))}
       </div>
+    
     </main>
   );
 };

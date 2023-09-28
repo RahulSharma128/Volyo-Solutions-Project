@@ -25,6 +25,7 @@ const handleDeleteClick = async (taskId, isCompleted, fetchUncompletedTasks, fet
       console.error(`Error deleting task with ID ${taskId} from completed tasks:`, error);
     }
   }
+
 };
 
 export default handleDeleteClick;

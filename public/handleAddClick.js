@@ -2,9 +2,7 @@
 import axios from 'axios';
 
 const handleAddClick = async (formState, setFormState, fetchUncompletedTasks, fetchCompletedTasks) => {
-  // Values from formStatetitle
-  const newTitle = formState.Title;
-   // Values from formState id
+const newTitle = formState.Title;
 
   //   Create a new todo object
   const newTodo = {
@@ -12,11 +10,6 @@ const handleAddClick = async (formState, setFormState, fetchUncompletedTasks, fe
     title: newTitle,
     completed: false,
   };
-
-  if(!newTitle){
-    alert("Please Enter a Task")
-    return
-  }
 
   try {
     await axios.post('http://localhost:3001/todos', newTodo);
