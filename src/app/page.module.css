@@ -1,34 +1,25 @@
 .main {
-  position: relative;
-  display: flex;
-  align-self: flex-start  ;
-  top: 0;
-  left: -112px;
-  width: 100%;
-  height: 100rem;
-}
-
-.main > div {
-  margin-left:12%;  
+  align-self: center;
+  margin-left: 32%;
 }
 
 .todo{
-  border-radius: 1%;
-  margin-left: 3%;
+  border-radius: 2%;
   background: rgba( 255, 255, 255, 0.3 );
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
   backdrop-filter: blur( 4px );
   -webkit-backdrop-filter: blur( 4px );
   width: 50%;
   text-align: center;
-  height: fit-content;
+  margin: 7px;
+  padding: 15px;
 }
 
 .Items{
   border-radius: 11px;
   display: flex;
-  margin-left: 3%;
-  margin-bottom: 15px;
+  margin-left: 4.5%;
+  margin-bottom: 10px;
   background: rgba( 255, 255, 255, 0.3 );
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
   backdrop-filter: blur( 4px );
@@ -36,26 +27,25 @@
   border: 1px solid rgba( 255, 255, 255, 0.18 );
   max-width: 90%;
   text-align: center;
-  height: fit-content;
- 
+  height: 100px;
 }
 
 .Number {
   font-size: xx-large;
   border-radius: 10%;
-  width: 20%; 
+  width: 15%; 
   margin: 2px;
   color: aliceblue;
   background-color: orange;
 }
 
 .Content {
+  text-align: center;
   width: 70%;
   margin-top: -10px;
   margin-left: 2%;
   border-radius: 15%;
 }
-
 
 .Task {
   overflow: visible;
@@ -77,14 +67,17 @@
 }
 
 .buttons {
-  padding-top: 5px;
+  padding-top: 1px;
   display: flex;
   flex-direction: column;
   margin: 10px;
   justify-content: center;
+  background: none;
+
 }
 
 .button {
+  margin-top: 10px;
   cursor: pointer;
   margin-bottom: 10px;
   border: none; 

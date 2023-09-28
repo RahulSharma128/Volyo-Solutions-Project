@@ -6,9 +6,10 @@ import styles from './page.module.css';
 import handleAddClick from '../../public/handleAddClick';
 import handleDeleteClick from '../../public/handleDeleteClick';
 import Fab from '@mui/material/Fab';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import Checkbox from "@mui/material/Checkbox";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faCheck, faCircleMinus } from "@fortawesome/free-solid-svg-icons";
+
 
 const convertTime = (timestamp) => {  
   const date = new Date(timestamp);
@@ -80,9 +81,9 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <div className={styles.todo}>
-        <h3>Add Task</h3>   <br />
+        <h3>Add Task</h3> 
         <div>
-          <label>Title</label>
+          <h5>Description</h5>
           <textarea placeholder="200 words limit"
             type="text"
             name="Title"
@@ -90,7 +91,7 @@ const Home = () => {
             onChange={(e) => setFormState({ ...formState, Title: e.target.value })}
           />
         </div>
-        <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add">
+        <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add"><br/>
         <AddIcon /></Fab></div>
       </div>
       <div className={styles.todo}>
@@ -105,8 +106,8 @@ const Home = () => {
               <p className={styles.Time}>Time: {convertTime(task.id).formattedTime}  Date:{convertTime(task.id).formattedDate}</p>
             </div>
             <div className={styles.buttons}> 
-            <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}> <DeleteIcon /></div>
-            <div className={styles.button} onClick={() => handleMarkClick(task.id)}><Checkbox defaultChecked size="small" /></div>
+            <div className={styles.button} onClick={() => handleMarkClick(task.id)}> <FontAwesomeIcon icon={faCheck} /></div>
+            <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}> <FontAwesomeIcon icon={faTrash} /></div>
          </div>
          </div>
           );
@@ -123,7 +124,7 @@ const Home = () => {
              <p className={styles.Time}> Time: {convertTime(task.id).formattedTime} &nbsp; &nbsp; Date:{convertTime(task.id).formattedDate}</p>
            </div>
            <div className={styles.buttons}> 
-           <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <DeleteIcon /></div>
+           <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <FontAwesomeIcon icon={faCircleMinus} /></div>
          </div>
          </div>
         ))}

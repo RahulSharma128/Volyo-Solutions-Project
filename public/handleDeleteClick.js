@@ -2,9 +2,6 @@
 import axios from 'axios';
 
 const handleDeleteClick = async (taskId, isCompleted, fetchUncompletedTasks, fetchCompletedTasks) => {
-  console.log('====================================');
-  console.log(isCompleted);
-  console.log('====================================');
   if (!isCompleted) {
     try {
       // Send a DELETE request to remove the task with the given ID

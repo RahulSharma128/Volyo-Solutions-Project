@@ -13,6 +13,10 @@ const handleAddClick = async (formState, setFormState, fetchUncompletedTasks, fe
     completed: false,
   };
 
+  if(!newTitle){
+    alert("Please Enter a Task")
+    return
+  }
 
   try {
     await axios.post('http://localhost:3001/todos', newTodo);

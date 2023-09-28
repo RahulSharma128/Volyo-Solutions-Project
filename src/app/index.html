@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Style the checkbox container */
+.custom-checkbox {
+  position: relative;
+  padding-left: 30px; /* Adjust the padding as needed */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hide the default checkbox input */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px; /* Adjust the size as needed */
+  width: 20px; /* Adjust the size as needed */
+  background-color: #fff;
+  border: 2px solid #333;
+}
+
+/* Style the checkmark when the checkbox is checked */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #333;
+  border-color: #fff;
+}
+
+/* Style the label text */
+.custom-checkbox:hover {
+  color: #333; /* Change color on hover if desired */
+}
+
+/* Adjust the label text position */
+.custom-checkbox input:checked ~ .checkmark::before {
+  content: '\2713'; /* Unicode checkmark symbol */
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+    </style>
+</head>
+<body>
+    <label class="custom-checkbox">
+        <input type="checkbox" id="completed" />
+        <span class="checkmark"></span>
+        Mark as Completed
+      </label>
+      
+</body>
+</html>
