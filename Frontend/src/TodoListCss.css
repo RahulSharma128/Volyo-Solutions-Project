@@ -1,0 +1,27 @@
+
+.container2{
+    border-color: antiquewhite;
+    border: 20px;
+    justify-content: center;
+    justify-items: center;
+   
+    
+}
+.bor{
+    align-items: center;
+    margin-top: 3em;
+    width: 100%;
+   justify-content: center;
+    border: 5px;
+    border-color: antiquewhite;
+  display: flex;
+   
+}
+.li{
+    border: 2px;
+    border-color: antiquewhite;
+    color: aliceblue;
+    list-style-type: none;
+    font-size: 2em;
+}
+
