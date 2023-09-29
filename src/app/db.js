@@ -1,4 +1,3 @@
-// public/handleAddClick.mjs
 import express from 'express';
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
@@ -43,3 +42,5 @@ const abc = () => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+export default abc;
