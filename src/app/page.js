@@ -1,15 +1,16 @@
 'use client'
- 
+
 import { useState, useEffect} from 'react'
 import axios from 'axios';
 import styles from './page.module.css';
 import handleAddClick from '../../public/handleAddClick';
 import handleDeleteClick from '../../public/handleDeleteClick';
 import AlertComponent from '../../public/AlertComponent';
+import AlertDialog from '../../public/DialogTitle';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faCheck, faCircleMinus } from "@fortawesome/free-solid-svg-icons";
+import {  faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const convertTime = (timestamp) => {  
   const date = new Date(timestamp);
@@ -26,12 +27,25 @@ const convertTime = (timestamp) => {
 }
 };
 
-
 const Home = () => {
   const [formState, setFormState] = useState({
     ID: Date.now(),
     Title: '',
   });
+  const charLimit = 50; // Set your word limit here
+
+  const handleTextareaChange = (e) => {
+    const text = e.target.value;
+    if (text.length <= charLimit) {
+      setFormState({ ...formState, Title: text });
+    }
+  };
+
+
+  const countWords = (text) => {
+    return text.trim().split(/\s+/).filter(Boolean).length;
+  };
+
 
   const [uncompletedTasks, setUncompletedTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
@@ -118,12 +132,15 @@ const Home = () => {
         <h3>Add Task</h3> 
         <div>
           <h5>Description</h5>
-          <textarea placeholder="200 words limit"
+          <textarea  placeholder={`Max ${charLimit} characters`}
             type="text"
             name="Title"
             value={formState.Title}
-            onChange={(e) => setFormState({ ...formState, Title: e.target.value })}
+            onChange={handleTextareaChange}
           />
+           <p>
+           Character Count: {formState.Title.length}/{charLimit}
+          </p>
         </div>
         <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add"><br/><AddIcon /></Fab></div></div>
       <div className={styles.todo}>
@@ -139,14 +156,14 @@ const Home = () => {
             </div>
             <div className={styles.buttons}> 
             <div className={styles.button} onClick={() => handleMarkClick(task.id)}> <FontAwesomeIcon icon={faCheck} /></div>
-            <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, false)}> <FontAwesomeIcon icon={faTrash} /></div>
+          <AlertDialog handleDeleteClickWrapper={handleDeleteClickWrapper} taskId={task.id} isTrue={false} />
          </div>
          </div>
           );
           })}
       </div>
       <div className={styles.todo}>
-        <h3>Completed Task</h3>
+      <h3>{completedTasks.length > 0? `Completed Tasks: ${completedTasks.length}`: uncompletedTasks.length > 0? 'All Task Completed': 'No Tasks Available'}</h3>
         <br />
         {completedTasks && completedTasks.map((task,index) => (
            <div key={task.id} className={styles.Items}>
@@ -156,7 +173,9 @@ const Home = () => {
              <p className={styles.Time}> Time: {convertTime(task.id).formattedTime} &nbsp; &nbsp; Date:{convertTime(task.id).formattedDate}</p>
            </div>
            <div className={styles.buttons}> 
-           <div className={styles.button} onClick={() => handleDeleteClickWrapper(task.id, true)}> <FontAwesomeIcon icon={faCircleMinus} /></div>
+           <div className={styles.button}>
+           <AlertDialog handleDeleteClickWrapper={handleDeleteClickWrapper} taskId={task.id} isTrue={true} />
+           </div>
          </div>
          </div>
         ))}
@@ -165,7 +184,6 @@ const Home = () => {
     </main>
   );
 };
-
 
 export default Home;
 

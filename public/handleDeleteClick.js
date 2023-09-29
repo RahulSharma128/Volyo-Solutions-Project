@@ -29,3 +29,4 @@ const handleDeleteClick = async (taskId, isCompleted, fetchUncompletedTasks, fet
 };
 
 export default handleDeleteClick;
+// onClick={() => handleDeleteClickWrapper(task.id, true) }

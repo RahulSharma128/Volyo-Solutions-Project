@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
+
 function AlertComponent({ severity, message, onClose }) {
   const [showAlert, setShowAlert] = useState(false);
 
