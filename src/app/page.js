@@ -144,7 +144,7 @@ const Home = () => {
         </div>
         <div onClick={handleAddClickWrapper}>  <Fab color="primary" aria-label="add"><br/><AddIcon /></Fab></div></div>
       <div className={styles.todo}>
-      <h3>{uncompletedTasks.length > 0 ? `Number of Uncompleted Tasks: ${uncompletedTasks.length}` : 'No Task'}</h3>
+      <h3>{uncompletedTasks.length > 0 ? `Tasks Due: ${uncompletedTasks.length}` : 'No Task Due'}</h3>
         <br />
         {uncompletedTasks && uncompletedTasks.map((task,index) => {
           return(
@@ -163,7 +163,7 @@ const Home = () => {
           })}
       </div>
       <div className={styles.todo}>
-      <h3>{completedTasks.length > 0? `Completed Tasks: ${completedTasks.length}`: uncompletedTasks.length > 0? 'All Task Completed': 'No Tasks Available'}</h3>
+      <h3>{completedTasks.length > 0 && uncompletedTasks.length > 0 ?  `Completed Tasks: ${completedTasks.length}`: uncompletedTasks.length > 0? 'No Tasks Completed': 'All Task Completed'}</h3>
         <br />
         {completedTasks && completedTasks.map((task,index) => (
            <div key={task.id} className={styles.Items}>
