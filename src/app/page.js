@@ -7,12 +7,13 @@ import handleAddClick from '../../public/handleAddClick';
 import handleDeleteClick from '../../public/handleDeleteClick';
 import AlertComponent from '../../public/AlertComponent';
 import AlertDialog from '../../public/DialogTitle';
-//import abc from './db.js'
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faCheck } from "@fortawesome/free-solid-svg-icons";
-//abc()
+// import { GET, POST, PUT, DELETE } from './api/route.js';
+
+
 const convertTime = (timestamp) => {  
   const date = new Date(timestamp);
   const day = String(date.getDate()).padStart(2, '0');
@@ -28,6 +29,15 @@ const convertTime = (timestamp) => {
 }
 };
 
+// customApi= async()=>{
+//   try {
+//   } catch (error) {
+//     console.error('Error fetching uncompleted tasks:', error);
+//   }
+// };
+
+
+
 const Home = () => {
   const [formState, setFormState] = useState({
     ID: Date.now(),
@@ -42,19 +52,12 @@ const Home = () => {
     }
   };
 
-
-  const countWords = (text) => {
-    return text.trim().split(/\s+/).filter(Boolean).length;
-  };
-
-
   const [uncompletedTasks, setUncompletedTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
 
   const [alertSeverity, setAlertSeverity] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-
 
   //console.log(uncompletedTasks);
   const fetchUncompletedTasks = async () => {
