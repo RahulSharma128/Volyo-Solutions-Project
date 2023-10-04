@@ -12,7 +12,7 @@ const newTitle = formState.Title;
   };
 
   try {
-    await axios.post('http://localhost:3001/todos', newTodo);
+    await axios.post('/api/', newTodo);
     // Input fields
     setFormState({
       ID: '',

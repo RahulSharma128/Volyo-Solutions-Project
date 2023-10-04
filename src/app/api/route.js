@@ -1,10 +1,21 @@
 import query from "./db.js";
 
 export async function GET(request) {
+    const url = new URL(request.url);
+    const queryParams = url.searchParams.get('completed');
+
+    let values = [];
+
+    if (queryParams !== null) {
+        if (queryParams === 'true') {
+            values = [1];
+        } else if (queryParams === 'false') {
+            values = [0];
+        }
+    }
     const users = await query({
-        query: "SELECT * FROM tasks ",
-        //query: "SELECT * FROM tasks where completed= ?",
-        values: [],
+        query: "SELECT * FROM tasks where completed= ?",
+        values,
     });
 
     let data = JSON.stringify(users);
@@ -14,77 +25,47 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-
     try {
-        const { visitor_name } = await request.json();
-        const updateUsers = await query({
-            query: "INSERT INTO visitors (visitor_name) VALUES (?)",
-            values: [visitor_name],
+        const newTodo = await request.json(); 
+        const { id, title } = newTodo; 
+        // Perform the INSERT operation into the 'tasks' table
+        const updateTasks = await query({
+            query: "INSERT INTO tasks (id, title) VALUES (?, ?)",
+            values: [id, title],
         });
-        const result = updateUsers.affectedRows;
+
+        const result = updateTasks.affectedRows;
         let message = "";
         if (result) {
             message = "success";
         } else {
             message = "error";
         }
+
         const product = {
-            visitor_name: visitor_name,
+            title: title,
         };
+
         return new Response(JSON.stringify({
             message: message,
             status: 200,
-            product: product
+            product: product,
         }));
     } catch (error) {
         return new Response(JSON.stringify({
             status: 500,
-            data: request
+            data: request,
         }));
     }
 }
-
-export async function PUT(request) {
-
-    try {
-        const { id, visitor_name } = await request.json();
-        const updateProducts = await query({
-            query: "UPDATE visitors SET visitor_name = ? WHERE id = ?",
-            values: [visitor_name, id],
-        });
-        const result = updateProducts.affectedRows;
-        let message = "";
-        if (result) {
-            message = "success";
-        } else {
-            message = "error";
-        }
-        const product = {
-            id: id,
-            visitor_name: visitor_name,
-        };
-        return new Response(JSON.stringify({
-            message: message,
-            status: 200,
-            product: product
-        }));
-    } catch (error) {
-        return new Response(JSON.stringify({
-            status: 500,
-            data: res
-        }));
-    }
-
-}
-
 
 export async function DELETE(request) {
-
+    const url = new URL(request.url);
+    const taskId = url.searchParams.get('taskId');
     try {
-        const { id } = await request.json();
         const deleteUser = await query({
-            query: "DELETE FROM visitors WHERE id = ?",
-            values: [id],
+            query: "DELETE FROM tasks WHERE id = ?",
+            values: [taskId],
         });
         const result = deleteUser.affectedRows;
         let message = "";
@@ -94,7 +75,7 @@ export async function DELETE(request) {
             message = "error";
         }
         const product = {
-            id: id,
+            id: taskId,
         };
         return new Response(JSON.stringify({
             message: message,
@@ -107,6 +88,32 @@ export async function DELETE(request) {
             data: res
         }));
     }
-
 }
 
+export async function PUT(request) {
+    const url = new URL(request.url);
+    const taskId = url.searchParams.get('taskId');  
+    try {
+      const updateProducts = await query({
+        query: "UPDATE tasks SET completed = 1 WHERE id = ?",
+        values: [taskId],
+      });
+      const result = updateProducts.affectedRows;
+      let message = "";
+      if (result) {
+        message = "success";
+      } else {
+        message = "error";
+      }
+      return new Response(JSON.stringify({
+        message: message,
+        status: 200,
+      }));
+    } catch (error) {
+      return new Response(JSON.stringify({
+        status: 500,
+        data: error
+      }));
+    }
+  }
+  

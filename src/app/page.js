@@ -11,7 +11,6 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faCheck } from "@fortawesome/free-solid-svg-icons";
-// import { GET, POST, PUT, DELETE } from './api/route.js';
 
 
 const convertTime = (timestamp) => {  
@@ -24,26 +23,15 @@ const convertTime = (timestamp) => {
   const seconds = String(date.getSeconds()).padStart(2, '0');
   const formattedDate = `${day}-${month}-${year}`;
   const formattedTime = `${hours}:${minutes}:${seconds}`;
-  return{
-    formattedDate,formattedTime
-}
+  return{formattedDate,formattedTime}
 };
-
-// customApi= async()=>{
-//   try {
-//   } catch (error) {
-//     console.error('Error fetching uncompleted tasks:', error);
-//   }
-// };
-
-
 
 const Home = () => {
   const [formState, setFormState] = useState({
     ID: Date.now(),
     Title: '',
   });
-  const charLimit = 50; // Set your word limit here
+  const charLimit = 50; 
 
   const handleTextareaChange = (e) => {
     const text = e.target.value;
@@ -62,7 +50,7 @@ const Home = () => {
   //console.log(uncompletedTasks);
   const fetchUncompletedTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/todos');
+      const response = await axios.get('http://localhost:3000/api?completed=false');
       setUncompletedTasks(response.data);
     } catch (error) {
       console.error('Error fetching uncompleted tasks:', error);
@@ -71,7 +59,7 @@ const Home = () => {
 
   const fetchCompletedTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/completed');
+      const response = await axios.get('http://localhost:3000/api?completed=true');
       setCompletedTasks(response.data);
     } catch (error) {
       console.error('Error fetching completed tasks:', error);
@@ -84,9 +72,7 @@ const Home = () => {
   }, []);
 
   const handleAddClickWrapper = () => {
-
     if (!formState.Title) {
-      console.log("Emtyp",formState.Title);
       setAlertSeverity('error');
       setAlertMessage('Please Enter Task!');
       setShowAlert(true);
@@ -100,8 +86,8 @@ const Home = () => {
     return
   }};
 
-  const handleDeleteClickWrapper = (taskId, isCompleted) => {
-    handleDeleteClick(taskId, isCompleted, fetchUncompletedTasks, fetchCompletedTasks);
+  const handleDeleteClickWrapper = (taskId) => {
+    handleDeleteClick(taskId, fetchUncompletedTasks, fetchCompletedTasks);
     setAlertSeverity('warning');
     setAlertMessage('Task Deleted!');
     setShowAlert(true);
@@ -109,9 +95,9 @@ const Home = () => {
 
   const handleMarkClick = async (taskId) => {
     try {
-      const res = await axios.get(`http://localhost:3001/todos/${taskId}`);
-      await axios.delete(`http://localhost:3001/todos/${taskId}`);
-      await axios.post('http://localhost:3001/completed', res.data);
+     await axios.put(`/api/?taskId=${taskId}`);
+      
+
       fetchUncompletedTasks();
       fetchCompletedTasks();
 
@@ -160,7 +146,7 @@ const Home = () => {
             </div>
             <div className={styles.buttons}> 
             <div className={styles.button} onClick={() => handleMarkClick(task.id)}> <FontAwesomeIcon icon={faCheck} /></div>
-          <AlertDialog handleDeleteClickWrapper={handleDeleteClickWrapper} taskId={task.id} isTrue={false} />
+          <AlertDialog handleDeleteClickWrapper={handleDeleteClickWrapper} taskId={task.id} />
          </div>
          </div>
           );
@@ -178,7 +164,7 @@ const Home = () => {
            </div>
            <div className={styles.buttons}> 
            <div className={styles.button}>
-           <AlertDialog handleDeleteClickWrapper={handleDeleteClickWrapper} taskId={task.id} isTrue={true} />
+           <AlertDialog handleDeleteClickWrapper={handleDeleteClickWrapper} taskId={task.id} />
            </div>
          </div>
          </div>
