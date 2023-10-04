@@ -1,10 +1,13 @@
-// public/handleDeleteClick.js
 import axios from 'axios';
 
 const handleDeleteClick = async (taskId, fetchUncompletedTasks, fetchCompletedTasks) => {
     try {
       // Send a DELETE request to remove the task with the given ID
-      await axios.delete(`/api/?taskId=${taskId}`);
+        await axios.delete(`/api/?taskId=${taskId}`, {
+        headers: {
+          API_KEY: process.env.API_KEY,
+        },
+      });
       fetchUncompletedTasks();
       fetchCompletedTasks();
     } catch (error) {

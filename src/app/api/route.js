@@ -1,10 +1,25 @@
 import query from "./db.js";
 
+function Authorization(request) {
+    const apiKey = process.env.API_KEY;
+    //console.log(request.headers);
+    const authorizationHeader = request.headers.get('api_key');
+   //console.log(authorizationHeader);
+    return authorizationHeader === apiKey;
+}
+
 export async function GET(request) {
     const url = new URL(request.url);
     const queryParams = url.searchParams.get('completed');
+  
+    if (!Authorization(request)) {
+        return new Response('Unauthorized', {
+            status: 401,
+        });
+    }
 
     let values = [];
+    let users = "";
 
     if (queryParams !== null) {
         if (queryParams === 'true') {
@@ -12,11 +27,15 @@ export async function GET(request) {
         } else if (queryParams === 'false') {
             values = [0];
         }
+        users = await query({
+            query: "SELECT * FROM tasks where completed = ?",
+            values,
+        });
+    } else {
+        users = await query({
+            query: "SELECT * FROM tasks"
+        });
     }
-    const users = await query({
-        query: "SELECT * FROM tasks where completed= ?",
-        values,
-    });
 
     let data = JSON.stringify(users);
     return new Response(data, {
@@ -24,7 +43,15 @@ export async function GET(request) {
     });
 }
 
+
 export async function POST(request) {
+
+    if (!Authorization(request)) {
+        return new Response('Unauthorized', {
+            status: 401,
+        });
+    }
+
     try {
         const newTodo = await request.json(); 
         const { id, title } = newTodo; 
@@ -37,29 +64,37 @@ export async function POST(request) {
         const result = updateTasks.affectedRows;
         let message = "";
         if (result) {
-            message = "success";
+            message = "Succesfully Added Task";
         } else {
             message = "error";
         }
 
         const product = {
-            title: title,
+            id:id,
+            title: title
         };
 
         return new Response(JSON.stringify({
             message: message,
-            status: 200,
-            product: product,
+            status: 201,
+            product: product
         }));
     } catch (error) {
         return new Response(JSON.stringify({
+            message:"Please check The Id",
             status: 500,
-            data: request,
+            data: request
         }));
     }
 }
 
 export async function DELETE(request) {
+    if (!Authorization(request)) {
+        return new Response('Unauthorized', {
+            status: 401,
+        });
+    }
+
     const url = new URL(request.url);
     const taskId = url.searchParams.get('taskId');
     try {
@@ -91,6 +126,13 @@ export async function DELETE(request) {
 }
 
 export async function PUT(request) {
+    console.log(request.headers);
+
+    if (!Authorization(request)) {
+        return new Response('Unauthorized', {
+            status: 401,
+        });
+    }
     const url = new URL(request.url);
     const taskId = url.searchParams.get('taskId');  
     try {

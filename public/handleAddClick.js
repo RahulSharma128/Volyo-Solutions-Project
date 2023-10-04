@@ -7,13 +7,15 @@ const newTitle = formState.Title;
   //   Create a new todo object
   const newTodo = {
     id: Date.now(),
-    title: newTitle,
-    completed: false,
+    title: newTitle
   };
 
   try {
-    await axios.post('/api/', newTodo);
-    // Input fields
+    await axios.post('/api/', newTodo, {
+      headers: {
+        API_KEY: process.env.API_KEY,
+      },
+    });
     setFormState({
       ID: '',
       Title: '',

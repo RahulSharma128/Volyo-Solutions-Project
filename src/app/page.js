@@ -12,7 +12,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faCheck } from "@fortawesome/free-solid-svg-icons";
 
-
 const convertTime = (timestamp) => {  
   const date = new Date(timestamp);
   const day = String(date.getDate()).padStart(2, '0');
@@ -50,16 +49,25 @@ const Home = () => {
   //console.log(uncompletedTasks);
   const fetchUncompletedTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api?completed=false');
+      const response = await axios.get('http://localhost:3000/api?completed=false', {
+        headers: {
+          API_KEY: process.env.API_KEY,
+        },
+      });
       setUncompletedTasks(response.data);
     } catch (error) {
       console.error('Error fetching uncompleted tasks:', error);
+      
     }
   };
 
   const fetchCompletedTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api?completed=true');
+      const response = await axios.get('http://localhost:3000/api?completed=true', {
+        headers: {
+          API_KEY: process.env.API_KEY,
+        },
+      });
       setCompletedTasks(response.data);
     } catch (error) {
       console.error('Error fetching completed tasks:', error);
@@ -70,6 +78,7 @@ const Home = () => {
     fetchUncompletedTasks();
     fetchCompletedTasks()
   }, []);
+  
 
   const handleAddClickWrapper = () => {
     if (!formState.Title) {
@@ -95,8 +104,11 @@ const Home = () => {
 
   const handleMarkClick = async (taskId) => {
     try {
-     await axios.put(`/api/?taskId=${taskId}`);
-      
+      const response = await axios.put(`/api/?taskId=${taskId}`, null, {
+        headers: {
+          API_KEY: process.env.API_KEY,
+        },
+      });
 
       fetchUncompletedTasks();
       fetchCompletedTasks();
@@ -110,8 +122,8 @@ const Home = () => {
   };
 
   return (
-    <main className={styles.main}>
-          {showAlert && (
+<main className={styles.main}>
+{showAlert && (
         <AlertComponent
           severity={alertSeverity}
           message={alertMessage}
@@ -172,6 +184,8 @@ const Home = () => {
       </div>
     
     </main>
+
+    
   );
 };
 
