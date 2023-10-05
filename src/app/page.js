@@ -46,7 +46,6 @@ const Home = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
-  //console.log(uncompletedTasks);
   const fetchUncompletedTasks = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api?completed=false', {
@@ -104,7 +103,7 @@ const Home = () => {
 
   const handleMarkClick = async (taskId) => {
     try {
-      const response = await axios.put(`/api/?taskId=${taskId}`, null, {
+       await axios.put(`/api/?taskId=${taskId}`, null, {
         headers: {
           API_KEY: process.env.API_KEY,
         },

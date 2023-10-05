@@ -2,9 +2,7 @@ import query from "./db.js";
 
 function Authorization(request) {
     const apiKey = process.env.API_KEY;
-    //console.log(request.headers);
     const authorizationHeader = request.headers.get('api_key');
-   //console.log(authorizationHeader);
     return authorizationHeader === apiKey;
 }
 
@@ -126,7 +124,6 @@ export async function DELETE(request) {
 }
 
 export async function PUT(request) {
-    console.log(request.headers);
 
     if (!Authorization(request)) {
         return new Response('Unauthorized', {

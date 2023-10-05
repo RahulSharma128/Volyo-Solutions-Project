@@ -1,5 +1,6 @@
-// public/handleAddClick.js
 import axios from 'axios';
+import dotenv from "dotenv";
+dotenv.config();
 
 const handleAddClick = async (formState, setFormState, fetchUncompletedTasks, fetchCompletedTasks) => {
 const newTitle = formState.Title;

@@ -1,5 +1,3 @@
-import query from "../src/app/api/db";
-
 const migrationsDir = path.join(__dirname, 'migrations');
 
 fs.readdirSync(migrationsDir).forEach((filename) => {
