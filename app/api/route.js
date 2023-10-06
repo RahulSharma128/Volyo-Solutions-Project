@@ -1,5 +1,6 @@
 import query from "./db.js";
-import { verify } from 'jsonwebtoken';
+import verify  from 'jsonwebtoken';
+import {retrieveAllTasks} from "./db/sequelize.js";
 
 
 function JWTauthentication(request) {
@@ -35,11 +36,8 @@ export async function GET(request) {
   if (authenticationResult !== null) {
     return authenticationResult;
   }
-    let tasks = await query({
-      query: "SELECT * FROM tasks"
-    });
 
-
+  const tasks = retrieveAllTasks
   const data = JSON.stringify(tasks);
   return new Response(data, {
     status: 200,
