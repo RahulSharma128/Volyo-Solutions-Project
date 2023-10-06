@@ -36,7 +36,7 @@ export async function GET(request) {
     return authenticationResult;
   }
 
-  const tasks = await getAllTasks(); // using sequlise to get all data
+  const tasks = await getAllTasks(); // using seequlise to get all data
 
   const data = JSON.stringify(tasks);
   return new Response(data, {
