@@ -1,7 +1,6 @@
 import query from "./db.js";
-import verify  from 'jsonwebtoken';
-import {retrieveAllTasks} from "./db/sequelize.js";
-
+import {verify}  from 'jsonwebtoken';
+import { getAllTasks, addTask, updateTask, deleteTask } from './db/sequelize.js';
 
 function JWTauthentication(request) {
   const authorizationHeader = request.headers.get('authorization');
@@ -22,9 +21,8 @@ function JWTauthentication(request) {
 
   try {
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
-    console.log(decoded);
 
-    return null; 
+    return decoded; 
   } catch (error) {
     console.error('Token verification failed:', error.message);
     return new Response('Unauthorized', { status: 401 });
@@ -33,11 +31,13 @@ function JWTauthentication(request) {
 
 export async function GET(request) {
   const authenticationResult = JWTauthentication(request);
-  if (authenticationResult !== null) {
+  console.log(authenticationResult);
+  if (authenticationResult.status===401) {
     return authenticationResult;
   }
 
-  const tasks = retrieveAllTasks
+  const tasks = await getAllTasks(); // using sequlise to get all data
+
   const data = JSON.stringify(tasks);
   return new Response(data, {
     status: 200,
@@ -46,37 +46,32 @@ export async function GET(request) {
 
 
 export async function POST(request) {
-
   const authenticationResult = JWTauthentication(request);
-  if (authenticationResult !== null) {
+  console.log(authenticationResult);
+  if (authenticationResult.status===401) {
     return authenticationResult;
   }
-
     try {
-        const newTodo = await request.json(); 
-        const { id, title } = newTodo; 
-        const updateTasks = await query({
-            query: "INSERT INTO tasks (id, title) VALUES (?, ?)",
-            values: [id, title],
-        });
+      const { id, title, completed } = authenticationResult; 
+      const newTaskData = {
+        id:id,
+        time: new Date(), 
+        title: title, 
+        completed: completed, 
+      };
+      
+      const createdTask = await addTask(newTaskData);
 
-        const result = updateTasks.affectedRows;
         let message = "";
-        if (result) {
+        if (createdTask) {
             message = "Succesfully Added Task";
         } else {
             message = "error";
         }
-
-        const product = {
-            id:id,
-            title: title
-        };
-
         return new Response(JSON.stringify({
-            message: message,
             status: 201,
-            product: product
+            message: message,          
+            newTaskData: newTaskData
         }));
     } catch (error) {
         return new Response(JSON.stringify({
@@ -87,70 +82,61 @@ export async function POST(request) {
     }
 }
 
+export async function PUT(request) {
+  const authenticationResult = JWTauthentication(request);
+  //  console.log(authenticationResult);
+  if (authenticationResult.status===401) {
+    return authenticationResult;
+      }
+    //console.log(authenticationResult)
+    const { taskIdToUpdate, completed } = authenticationResult; 
+    const updatedData = {
+      title: taskIdToUpdate, 
+      completed: completed, 
+    };  
+    try {
+    let updatedTasks = await updateTask(taskIdToUpdate, updatedData);
+    console.log(updatedTasks);
+    let message = "";
+    (updatedTasks="updated")  ? message = `Task with ID ${taskIdToUpdate} was Updated.` : message ="error";
+    return new Response(JSON.stringify({
+      message: message,
+      status: 200,
+    }));
+    } catch (error) {      
+      console.error('Error updating task:', error.message);
+      error= error.message;
+      return new Response(JSON.stringify({
+      status: 204,
+      message: error
+      }));
+
+    }
+ }
+  
+
 export async function DELETE(request) {
   const authenticationResult = JWTauthentication(request);
-  if (authenticationResult !== null) {
+  //  console.log(authenticationResult);
+  if (authenticationResult.status===401) {
     return authenticationResult;
-  }
+      }
+    //console.log(authenticationResult)
+    let {taskIdToDelete} = authenticationResult;
 
-    const url = new URL(request.url);
-    const taskId = url.searchParams.get('taskId');
     try {
-        const deleteUser = await query({
-            query: "DELETE FROM tasks WHERE id = ?",
-            values: [taskId],
-        });
-        const result = deleteUser.affectedRows;
-        let message = "";
-        if (result) {
-            message = "success";
-        } else {
-            message = "error";
-        }
-        const product = {
-            id: taskId,
-        };
-        return new Response(JSON.stringify({
-            message: message,
-            status: 200,
-            product: product
+      const resultMessage = await deleteTask(taskIdToDelete);
+      console.log(resultMessage);
+       return new Response(JSON.stringify({
+            message: resultMessage,
+            TaskId : taskIdToDelete
         }));
     } catch (error) {
-        return new Response(JSON.stringify({
-            status: 500,
-            data: res
-        }));
+      console.error('Error deleting task:', error.message);
+      return new Response(JSON.stringify({
+      status: 500,
+      error : error.message
+    }));
     }
 }
 
-export async function PUT(request) {
-  const authenticationResult = JWTauthentication(request);
-  if (authenticationResult !== null) {
-    return authenticationResult;
-  }
-    const url = new URL(request.url);
-    const taskId = url.searchParams.get('taskId');  
-    try {
-      const updateProducts = await query({
-        query: "UPDATE tasks SET completed = 1 WHERE id = ?",
-        values: [taskId],
-      });
-      const result = updateProducts.affectedRows;
-      let message = "";
-      if (result) {
-        message = "success";
-      } else {
-        message = "error";
-      }
-      return new Response(JSON.stringify({
-        message: message,
-        status: 200,
-      }));
-    } catch (error) {
-      return new Response(JSON.stringify({
-        status: 500,
-        data: error
-      }));
-    }
-  }
-  

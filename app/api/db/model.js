@@ -30,14 +30,4 @@ const Task = sequelizeInstance.define(
 
 sequelizeInstance.sync();
 
-async function getAllTasks() {
-  try {
-    const tasks = await Task.findAll();
-    return tasks;
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
-    throw error;
-  }
-}
-
-export default  getAllTasks ;
+export default Task;
