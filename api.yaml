@@ -4,17 +4,9 @@ info:
   version: "1.0.0"
 schemes:
   - http
+  - https
 paths:
-  /status:
-    get:
-      summary: staus check
-      description: Just a sample string response.
-      responses:
-        200:
-          description: Successful operation
-          schema:
-            type: string
-  /fetch:
+  /tasks/fetch:
     get:
       summary: Get all tasks
       description: Retrieve a list of all tasks from the database.
@@ -29,7 +21,8 @@ paths:
               $ref: "#/definitions/Task"
         500:
           description: Internal Server Error
-  /addTask:
+
+  /tasks/addTask:
     post:
       summary: Add a task
       description: Add a new task to the todo list.
@@ -41,7 +34,7 @@ paths:
           description: Task object
           required: true
           schema:
-            $ref: "#/definitions/Task"
+            $ref: "#/definitions/Task"  # Use the Task model here
       responses:
         201:
           description: Task added successfully
@@ -49,7 +42,51 @@ paths:
           description: Bad Request - Invalid input
         500:
           description: Internal Server Error
-  /completeTask/{id}:
+
+  /tasks/restoreTask:
+    post:
+      summary: Restore a task by ID
+      description: Restore a task from the todo list by its ID.
+      security:
+        - apiKey: []
+      parameters:
+        - in: body
+          name: restore
+          description: Task restoration object
+          required: true
+          schema:
+            $ref: "#/definitions/RestoreRequest"
+      responses:
+        201:
+          description: Task restored successfully
+        400:
+          description: Bad Request - Invalid input
+        500:
+          description: Internal Server Error
+
+  /tasks/deleteTask/{id}:
+    delete:
+      summary: Soft Delete a task by ID
+      description: Soft Delete a task from the todo list by its ID.
+      security:
+        - apiKey: []
+      parameters:
+        - in: path
+          name: id
+          description: ID of the task to delete
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Task soft deleted successfully
+        404:
+          description: Task not found
+        400:
+          description: Bad Request - Invalid input
+        500:
+          description: Internal Server Error
+
+  /tasks/completeTask/{id}:
     put:
       summary: Mark a task as complete
       description: Mark a task from the todo list as complete by its ID.
@@ -70,27 +107,28 @@ paths:
           description: Bad Request - Invalid input
         500:
           description: Internal Server Error
-  /deleteTask/{id}:
-    delete:
-      summary: Delete a task by ID
-      description: Delete a task from the todo list by its ID.
-      security:
-        - apiKey: []
-      parameters:
-        - in: path
-          name: id
-          description: ID of the task to delete
-          required: true
-          type: integer
-      responses:
-        200:
-          description: Task deleted successfully
-        404:
-          description: Task not found
-        400:
-          description: Bad Request - Invalid input
-        500:
-          description: Internal Server Error
+          
+  # /tasks/restoreTask/{id}:
+  #   put:
+  #     summary: Restore a soft-deleted task by setting isDeleted to false.
+  #     description: Restore a soft-deleted a task from the todo list by its ID.
+  #     security:
+  #       - apiKey: []
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         description: The ID of the soft-deleted task to be restored.
+  #         required: true
+  #         type: integer          
+  #     responses:
+  #       200:
+  #         description: Task restored successfully.
+  #       404:
+  #         description: Soft-deleted task not found.
+  #       400:
+  #         description: Bad request. Task ID is required.
+  #       500:
+  #         description: Internal Server Error.
 
 definitions:
   Task:
@@ -103,8 +141,15 @@ definitions:
         type: string
         description: Task description
       complete:
+        type: boolean
+        description: Task completion status (true for complete, false for incomplete
+
+  RestoreRequest:
+    type: object
+    properties:
+      taskId:
         type: integer
-        description: Task completion status (0 for incomplete, 1 for complete)
+        description: Task ID
 
 securityDefinitions:
   apiKey:
