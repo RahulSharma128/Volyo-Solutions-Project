@@ -1,5 +1,5 @@
 import sequelizeInstance from './server.js';
-import DataTypes  from 'sequelize';
+import DataTypes from 'sequelize';
 
 const Task = sequelizeInstance.define(
   'Task',
@@ -9,7 +9,7 @@ const Task = sequelizeInstance.define(
       primaryKey: true,
     },
     time: {
-      type: DataTypes.DATE, 
+      type: DataTypes.DATE,
       allowNull: false,
     },
     title: {
@@ -23,11 +23,13 @@ const Task = sequelizeInstance.define(
     },
   },
   {
-    tableName: 'tasks', 
-    timestamps: false, 
+    tableName: 'tasks',
+    paranoid: true, // Enable soft delete
   }
 );
 
+Task.sync();
 sequelizeInstance.sync();
 
 export default Task;
+

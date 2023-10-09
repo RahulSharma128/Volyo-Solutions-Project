@@ -53,3 +53,16 @@ export async function deleteTask(taskId) {
   }
 }
 
+
+export async function restoreSoftDeletedRecord(id) {
+  try {
+    const Result=await Task.restore({
+      taskIdToDelete: { id }
+    });
+   console.log("Result",Result);
+    return Result ;
+  } catch (error) {
+    console.error(`Error restoring record with id ${id}: ${error.message}`);
+  }
+  return { success: false };
+}

@@ -1,6 +1,7 @@
-import query from "./db.js";
 import {verify}  from 'jsonwebtoken';
-import { getAllTasks, addTask, updateTask, deleteTask } from './db/sequelize.js';
+import { getAllTasks, addTask, updateTask, deleteTask , restoreSoftDeletedRecord} from './db/sequelize.js';
+import seedDatabase from './db/seed.js';
+
 
 function JWTauthentication(request) {
   const authorizationHeader = request.headers.get('authorization');
@@ -30,56 +31,118 @@ function JWTauthentication(request) {
 }
 
 export async function GET(request) {
+
+
   const authenticationResult = JWTauthentication(request);
-  console.log(authenticationResult);
   if (authenticationResult.status===401) {
     return authenticationResult;
   }
+  const { seed} = authenticationResult;
+  console.log(seed);
+  try{
+  if(seed==="true"){
+    const seedRes= await seedDatabase();
+    if(seedRes===1) {
+      return new Response(JSON.stringify({
+        status: 205,
+        message: `Successfully seeded task `,
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } else {
+     // console.log(seedRes);
+      return new Response(JSON.stringify({
+        status: 500,
+        message: `Error seeding `,
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-  const tasks = await getAllTasks(); // using seequlise to get all data
+  }
+  else {
+    const tasks = await getAllTasks(); // using seequlise to get all data
 
-  const data = JSON.stringify(tasks);
-  return new Response(data, {
-    status: 200,
+    const data = JSON.stringify(tasks);
+    return new Response(data, {
+      status: 200,
+    });
+  }
+}catch (error) {
+  return new Response(JSON.stringify({
+    status: 500,
+    message: "Please check the ID",
+    data: request,
+  }), {
+    headers: { 'Content-Type': 'application/json' },
   });
 }
-
+}
 
 export async function POST(request) {
   const authenticationResult = JWTauthentication(request);
   console.log(authenticationResult);
-  if (authenticationResult.status===401) {
+  if (authenticationResult.status === 401) {
     return authenticationResult;
   }
-    try {
-      const { id, title, completed } = authenticationResult; 
+
+  const { id, title, completed, restoreId } = authenticationResult;
+
+  try {
+    if (restoreId !== undefined) {
+      const restoreResult = await restoreSoftDeletedRecord(restoreId);
+     // console.log("log",restoreResult);
+      if (restoreResult) {
+        return new Response(JSON.stringify({
+          status: 205,
+          message: `Successfully restored task with ID ${restoreId}`,
+        }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } else {
+        return new Response(JSON.stringify({
+          status: 500,
+          message: `Error restoring task with ID ${restoreId}`,
+        }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    } else {
       const newTaskData = {
-        id:id,
-        time: new Date(), 
-        title: title, 
-        completed: completed, 
+        id: id,
+        time: new Date(),
+        title: title,
+        completed: completed,
       };
-      
+
       const createdTask = await addTask(newTaskData);
 
-        let message = "";
-        if (createdTask) {
-            message = "Succesfully Added Task";
-        } else {
-            message = "error";
-        }
+      if (createdTask) {
         return new Response(JSON.stringify({
-            status: 201,
-            message: message,          
-            newTaskData: newTaskData
-        }));
-    } catch (error) {
+          status: 201,
+          message: "Successfully Added Task",
+          newTaskData: newTaskData,
+        }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } else {
         return new Response(JSON.stringify({
-            message:"Please check The Id",
-            status: 500,
-            data: request
-        }));
+          status: 500,
+          message: "Error creating a new task",
+        }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
+  } catch (error) {
+    return new Response(JSON.stringify({
+      status: 500,
+      message: "Please check the ID",
+      data: request,
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }
 
 export async function PUT(request) {
