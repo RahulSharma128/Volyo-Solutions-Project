@@ -1,4 +1,3 @@
-
 import Header from './header';
 import Sidebar from './sidebar';
 import React, { useState, useEffect } from 'react';
@@ -12,8 +11,8 @@ export default function Home() {
 
   return (
     <>
-      <Header onOpenSidebar={toggleSidebar} />
-      <Sidebar isDrawerOpen={isSidebarOpen} />
+      <Header toggleDrawer={toggleSidebar} />
+      <Sidebar isDrawerOpen={isSidebarOpen} toggleDrawer={toggleSidebar} />
     </>
   );
 }

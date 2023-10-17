@@ -11,29 +11,18 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
 export default function TemporaryDrawer(props) {
-  const { isDrawerOpen } = props; // Receive isDrawerOpen as a prop
-
-  const [localIsDrawerOpen, setLocalDrawerOpen] = useState(isDrawerOpen);
-
-  useEffect(() => {
-    setLocalDrawerOpen(isDrawerOpen); // Update local state when prop changes
-  }, [isDrawerOpen]);
-
-  const toggleDrawer = () => {
-    setLocalDrawerOpen(!localIsDrawerOpen);
-  };
-
+  const { isDrawerOpen, toggleDrawer } = props;
   return (
     <div>
       <Box
         sx={{ display: 'flex', justifyContent: 'flex-start', padding: '10px' }}
       >
-       {/*<button onClick={toggleDrawer}>Toggle Drawer</button>*/}
-       <button onClick={toggleDrawer}>Toggle Drawer</button>
-        </Box>
+        {}
+        <button onClick={toggleDrawer}>Toggle Drawer</button>
+      </Box>
 
-      <Drawer anchor="left" open={localIsDrawerOpen} onClose={toggleDrawer}>
-        <Box sx={{ width: 250 }}>
+      <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer}>
+      <Box sx={{ width: 250 }}>
           <List>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
               <ListItem key={text} disablePadding>

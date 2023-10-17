@@ -19,8 +19,7 @@ import Sidebar from './sidebar';
 export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const { onOpenSidebar } = props;
-
+  const { toggleDrawer } = props;
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -125,7 +124,7 @@ export default function PrimarySearchAppBar(props) {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
-           onClick={() => setDrawerOpen(true)} // Trigger the sidebar opening
+            onClick={toggleDrawer}  
           >
             <MenuIcon />
           </IconButton>
