@@ -115,7 +115,7 @@ export default function PrimarySearchAppBar(props) {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }} color='default' enableColorOnDark>
+    <Box sx={{ flexGrow: 1 }} color='default'>
       <AppBar position="static">
         <Toolbar>
           <IconButton

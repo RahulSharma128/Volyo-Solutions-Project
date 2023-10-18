@@ -1,37 +1,60 @@
 import React from 'react';
-import DATA from '../db.json';
-import '@/styles/Home.module.css'
-import { Table } from 'antd';
+import DATA from '../db1.json';
+import '@/styles/Home.module.css';
+import { Table, Button } from 'antd';
 
-const columns = DATA.columns.map(column => {
-  if (column.dataIndex === 'name') {
+const mapColumn = (column) => {
+  if (column.dataIndex === 'roll' || column.dataIndex === 'location') {
     return {
       ...column,
-      onFilter: (value, record) => record.name.includes(value),
+      onFilter: (value, record) => {
+        const dataValue = record[column.dataIndex].toLowerCase();
+        return dataValue.includes(value.toLowerCase());
+      },
     };
-  } else if (column.dataIndex === 'address') {
-    return {
-      ...column,
-      onFilter: (value, record) => record.address.includes(value),
-    };
-  }else if (column.dataIndex === 'age') {
-      return {
-        ...column,
-        sorter: (a, b) => a.age - b.age,
-      };
-    }
+  }
   return column;
-});
+};
 
+// Define a custom column for "Actions"
+const actionsColumn = {
+  title: 'Actions',
+  dataIndex: 'actions',
+  render: (text, record) => (
+    <div>
+      <Button type="primary" onClick={() => handleEdit(record)}>Edit</Button>
+      <Button type="danger" onClick={() => handleDelete(record)}>Delete</Button>
+    </div>
+  ),
+};
+
+// Add the "Actions" column to the columns array
+const columns = [...DATA.columns, actionsColumn].map(mapColumn);
 const data = DATA.data;
+
+const handleEdit = (record) => {
+  // Implement edit logic here
+  console.log('Edit clicked for record:', record);
+};
+
+const handleDelete = (record) => {
+  // Implement delete logic here
+  console.log('Delete clicked for record:', record);
+};
 
 const onChange = (pagination, filters, sorter, extra) => {
   console.log('params', pagination, filters, sorter, extra);
 };
 
 const App = () => (
-    <div className="table-container">
-      <Table columns={columns} dataSource={data} onChange={onChange} />
-    </div>
-  );
+  <div className="table-container">
+    <Table
+      columns={columns}
+      dataSource={data}
+      onChange={onChange}
+      pagination={{ pageSize: 7 }}
+    />
+  </div>
+);
+
 export default App;
