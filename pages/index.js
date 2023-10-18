@@ -1,5 +1,6 @@
 import Header from './header';
 import Sidebar from './sidebar';
+import Profile from './profile';
 import React, { useState, useEffect } from 'react';
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <Header toggleDrawer={toggleSidebar} />
       <Sidebar isDrawerOpen={isSidebarOpen} toggleDrawer={toggleSidebar} />
+      <Profile/>
     </>
   );
 }

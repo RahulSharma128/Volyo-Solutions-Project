@@ -1,0 +1,63 @@
+.company_profile_tag {
+    display: flex;
+    justify-content: center;
+    color: aliceblue;
+    background-color: rgba(5, 37, 244, 0.858);
+    border-radius: 8px;
+}
+
+.major_div1 {
+    height: auto;
+    display: flex;
+    flex-direction: column; /* Updated: set the flex direction to column */
+    align-items: center; /* Center the content horizontally */
+    margin-top: 8px;
+    background-color: brown;
+}
+
+.comapany_detail_div {
+    padding: 10px;
+    border-radius:8px ;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    width: 80%;
+    background-color: antiquewhite;
+}
+
+.company_details_header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.h2_edit_button {
+    margin-left: 0; 
+   
+}
+
+.company_logo {
+    
+}
+
+.s {
+    margin-top: 8px;
+}
+
+.comapany_text_details{
+
+}
+
+.company_banner_div{
+    padding: 10px;
+    border-radius:8px ;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    width: 80%;
+    background-color: antiquewhite;
+}
+
+.company_banner{
+
+}

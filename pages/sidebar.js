@@ -14,12 +14,12 @@ export default function TemporaryDrawer(props) {
   const { isDrawerOpen, toggleDrawer } = props;
   return (
     <div>
-      <Box
+      {/* <Box
         sx={{ display: 'flex', justifyContent: 'flex-start', padding: '10px' }}
       >
         {}
         <button onClick={toggleDrawer}>Toggle Drawer</button>
-      </Box>
+      </Box> */}
 
       <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer}>
       <Box sx={{ width: 250 }}>
