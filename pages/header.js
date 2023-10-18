@@ -12,7 +12,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import Sidebar from './sidebar';
+
 
 
 
@@ -115,7 +115,7 @@ export default function PrimarySearchAppBar(props) {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} color='default' enableColorOnDark>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -149,7 +149,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={19} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

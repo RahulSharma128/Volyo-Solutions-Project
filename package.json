@@ -14,6 +14,7 @@
     "@mui/icons-material": "^5.14.13",
     "@mui/material": "^5.14.13",
     "@mui/styled-engine-sc": "^6.0.0-alpha.1",
+    "antd": "^5.10.1",
     "next": "13.5.5",
     "react": "^18",
     "react-dom": "^18",
