@@ -18,6 +18,7 @@ export default function Home() {
 
   return (
     <main className={Styles.customBox}>
+            <title>Partner Dashboard</title>
        <ThemeProvider theme={darkTheme}> 
        <Header toggleDrawer={toggleSidebar} />
       <Sidebar isDrawerOpen={isSidebarOpen} toggleDrawer={toggleSidebar} />
