@@ -4,11 +4,10 @@ const { verify } = require('jsonwebtoken');
 const router = express.Router();
 const dotenv = require('dotenv').config();
 const {getUserPassword,getUserDetails,addNewUser} = require('../models/query');
+
 // JWTauthentication function
 function JWTauthentication(request, response, next) {
   const authorizationHeader = request.headers['authorization'];
-
-
   if (!authorizationHeader) {
     console.error('Authorization header is missing');
     return response.status(401).send('Unauthorized');
@@ -25,8 +24,7 @@ function JWTauthentication(request, response, next) {
   const secretKey = Buffer.from(base64EncodedSecret, 'base64').toString('utf-8');
   try {
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
-    request.user = decoded; 
-   
+    request.decodedToken = decoded; 
     next(); // Continue to the next middleware or route
   } catch (error) {
     console.error('Token verification failed:', error.message);
@@ -44,27 +42,23 @@ async function comparePasswords(providedPassword, storedPassword) {
 
 // Login route
 router.get('/login', JWTauthentication, async (request, response) => {
-  const user = request.user;
-  const userProvidedPassword = user.password;
-  const emailToSearch = user.email;
-
+  const { email, password } = request.decodedToken;
   try {
-    const storedPassword = await getUserPassword(emailToSearch);
+    const storedPassword = await getUserPassword(email);
 
     if (!storedPassword) {
       response.status(401).send('User not found');
       return;
     }
-
-    const passwordMatch = await comparePasswords(userProvidedPassword, storedPassword);
-
+    
+    const passwordMatch = await comparePasswords(password, storedPassword);
+    
     if (passwordMatch) {
-      const userDetails = await getUserDetails(emailToSearch);
-
+      const userDetails = await getUserDetails(email);
       if (userDetails) {
         response.send(userDetails);
       } else {
-        response.status(404).send(`User with email ${emailToSearch} not found`);
+        response.status(404).send(`User with email ${email} not found`);
       }
     } else {
       response.status(401).send('Incorrect password');
@@ -77,7 +71,7 @@ router.get('/login', JWTauthentication, async (request, response) => {
 
 // register route
 router.post('/register', JWTauthentication, async (request, response) => {
- const userData = request.user;
+const userData = request.user;
 
 try{
   const addUser = await addNewUser(userData);
@@ -91,7 +85,6 @@ try{
     response.status(500).send('Internal Server Error');
   }
 });
-
 
 
 module.exports = router;
