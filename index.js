@@ -3,21 +3,21 @@ const app = express();
 const cookie = require("cookie-parser");
 const PORT = process.env.PORT||5000;
 
-const sequelize = require('./config/db');
-const PartnerTable = require('./models/partners_table');
-const PartnerUser = require('./models/partner_users');
-// Sync the models with the database
-sequelize.sync()
-  .then(() => {
-    console.log('Database is synchronized, associations created successfully.');
-    return PartnerUser.describe();
-  })
-  .then((attributes) => {
-    console.log('Associations for PartnerUser:');
-  })
-  .catch((error) => {
-    console.error('Error synchronizing the database:', error);
-  });
+// const sequelize = require('./config/db');
+// const PartnerTable = require('./models/partners_table');
+// const PartnerUser = require('./models/partner_users');
+// // Sync the models with the database
+// sequelize.sync()
+//   .then(() => {
+//     console.log('Database is synchronized, associations created successfully.');
+//     return PartnerUser.describe();
+//   })
+//   .then((attributes) => {
+//     console.log('Associations for PartnerUser:');
+//   })
+//   .catch((error) => {
+//     console.error('Error synchronizing the database:', error);
+//   });
 app.use(cookie());
 app.use(express.json());
 
