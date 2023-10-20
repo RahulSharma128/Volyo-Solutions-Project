@@ -13,20 +13,16 @@ function JWTauthentication(request, response, next) {
     console.error('Authorization header is missing');
     return response.status(401).send('Unauthorized');
   }
-  //console.log(authorizationHeader);
-
-  const tokenParts = authorizationHeader.split(' ');
+ const tokenParts = authorizationHeader.split(' ');
 
   if (tokenParts.length !== 2 || tokenParts[0].toLowerCase() !== 'bearer') {
     console.error('Invalid authorization header');
-    //console.log(tokenParts[1]);
     return response.status(401).send('Unauthorized');
   }
 
   const token = tokenParts[1];
   const base64EncodedSecret = process.env.secretKey;
   const secretKey = Buffer.from(base64EncodedSecret, 'base64').toString('utf-8');
-
   try {
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
     request.user = decoded; 
@@ -37,45 +33,49 @@ function JWTauthentication(request, response, next) {
     return response.status(401).send('Unauthorized');
   }
 }
+// Define a function to compare passwords with better error handling
+async function comparePasswords(providedPassword, storedPassword) {
+  try {
+    return await bcrypt.compare(providedPassword, storedPassword);
+  } catch (error) {
+    throw error;
+  }
+}
+
 // Login route
-router.post('/login', JWTauthentication, (request, response) => {
+router.post('/login', JWTauthentication, async (request, response) => {
   const user = request.user;
   const userProvidedPassword = user.password;
   const emailToSearch = user.email;
 
-  getUserPassword(emailToSearch)
-    .then((password) => {
-      if (password) {
-        bcrypt.compare(userProvidedPassword, password, (err, result) => {
-          if (err) {
-            console.error('Error comparing passwords:', err);
-            response.status(500).send('Internal Server Error');
-          } else if (result) {
-            getUserDetails(emailToSearch)
-              .then((userDetails) => {
-                if (userDetails) {
-                  response.send(userDetails);
-                } else {
-                  response.send(`User with email ${emailToSearch} not found.`);
-                }
-              })
-              .catch((error) => {
-                console.error('Error getting user details:', error);
-                response.status(500).send('Internal Server Error');
-              });
-          } else {
-            response.status(401).send('Incorrect password');
-          }
-        });
+  try {
+    const storedPassword = await getUserPassword(emailToSearch);
+
+    if (!storedPassword) {
+      response.status(401).send('User not found');
+      return;
+    }
+
+    const passwordMatch = await comparePasswords(userProvidedPassword, storedPassword);
+
+    if (passwordMatch) {
+      const userDetails = await getUserDetails(emailToSearch);
+
+      if (userDetails) {
+        response.send(userDetails);
       } else {
-        response.send(`No password found for email: ${emailToSearch}`);
+        response.status(404).send(`User with email ${emailToSearch} not found`);
       }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      response.status(500).send('Internal Server Error');
-    });
+    } else {
+      response.status(401).send('Incorrect password');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    response.status(500).send('Internal Server Error');
+  }
 });
+
+
 
 
 module.exports = router;
