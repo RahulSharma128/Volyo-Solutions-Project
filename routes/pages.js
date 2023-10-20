@@ -41,6 +41,20 @@ async function comparePasswords(providedPassword, storedPassword) {
 }
 
 // Login route
+/**
+ * @swagger
+ * /api/pages:
+ *   get:
+ *     summary: Get a list of all pages
+ *     description: Returns a list of all pages.
+ *     responses:
+ *       200:
+ *         description: A list of pages.
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Page'
+ */
 router.get('/login', JWTauthentication, async (request, response) => {
   const { email, password } = request.decodedToken;
   try {
