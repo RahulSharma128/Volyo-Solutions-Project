@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const { verify } = require('jsonwebtoken'); 
 const router = express.Router();
 const dotenv = require('dotenv').config();
-const {getUserPassword,getUserDetails} = require('../models/query');
+const {getUserPassword,getUserDetails,addNewUser} = require('../models/query');
 // JWTauthentication function
 function JWTauthentication(request, response, next) {
   const authorizationHeader = request.headers['authorization'];
@@ -43,7 +43,7 @@ async function comparePasswords(providedPassword, storedPassword) {
 }
 
 // Login route
-router.post('/login', JWTauthentication, async (request, response) => {
+router.get('/login', JWTauthentication, async (request, response) => {
   const user = request.user;
   const userProvidedPassword = user.password;
   const emailToSearch = user.email;
@@ -75,7 +75,24 @@ router.post('/login', JWTauthentication, async (request, response) => {
   }
 });
 
+// register route
+router.post('/register', JWTauthentication, async (request, response) => {
+ const userData = request.user;
+
+try{
+  const addUser = await addNewUser(userData);
+  if (addUser.success){
+    response.status(201).json(addUser.user);
+  } else {
+    response.status(400).json({ error: 'User creation failed' });
+  }
+}catch (error) {
+    console.error('Error:', error);
+    response.status(500).send('Internal Server Error');
+  }
+});
 
 
 
 module.exports = router;
+
