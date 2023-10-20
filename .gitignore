@@ -7,7 +7,6 @@
 node_modules/
 dist/
 bin/
-.env
 
 # Compiled Java class files
 *.class
