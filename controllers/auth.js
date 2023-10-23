@@ -40,7 +40,7 @@ async function comparePasswords(providedPassword, storedPassword) {
 }
 
 router.get('/login', JWTauthentication, async (request, response) => {
-  const {email, password } = request.body;
+  const {email, password } = request.headers;
   try {
     const storedPassword = await getUserPassword(email);
 
@@ -48,9 +48,7 @@ router.get('/login', JWTauthentication, async (request, response) => {
       response.status(401).send(`User with email ${email} not found`);
       return;
     }
-    
     const passwordMatch = await comparePasswords(password, storedPassword);
-    
     if (passwordMatch) {
       const userDetails = await getUserDetails(email);
       if (userDetails) {

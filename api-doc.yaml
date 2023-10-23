@@ -67,6 +67,19 @@ paths:
       tags: 
         - Authentication
       description: Authenticate a user and generate a JWT token.
+      parameters:
+      - in: header
+        name: email
+        schema:
+          type: string
+        required: true
+        description: The username of the user.
+      - in: header
+        name: password
+        schema:
+          type: string
+        required: true
+        description: The password of the user.
       responses:
         '200':
           description: Authentication successful
@@ -74,22 +87,7 @@ paths:
           description: Unauthorized
       security:
         - BearerAuth: []  # Specify the use of the BearerAuth scheme
-      requestBody:
-        description: User data to be authenticated
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                  description: The username of the user.
-                  example: mihir@gmail.com
-                password:
-                  type: string
-                  description: The password of the user.
-                  example: mihir@123
+    
 
   /register:
     post:
