@@ -19,7 +19,6 @@ function JWTauthentication(request, response, next) {
   }
   const token = tokenParts[1];
   const base64EncodedSecret = process.env.secretKey;
-  console.log(token);
   const secretKey = Buffer.from(base64EncodedSecret, 'base64');
   try {
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
@@ -67,8 +66,6 @@ router.get('/login', JWTauthentication, async (request, response) => {
 // register route
 router.post('/register', JWTauthentication, async (request, response) => {
 const userData = request.body;
-console.log(userData);
-
 try{
   const addUser = await addNewUser(userData);
   if (addUser.success){
