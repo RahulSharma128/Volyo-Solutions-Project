@@ -13,18 +13,22 @@ function JWTauthentication(request, response, next) {
     return response.status(401).send('Unauthorized');
   }
  const tokenParts = authorizationHeader.split(' ');
-console.log(authorizationHeader);
   if (tokenParts.length !== 2 || tokenParts[0].toLowerCase() !== 'bearer') {
     console.error('Invalid authorization header');
     return response.status(401).send('Unauthorized');
   }
 
   const token = tokenParts[1];
+  console.log(token);
   const base64EncodedSecret = process.env.secretKey;
-  const secretKey = Buffer.from(base64EncodedSecret, 'base64').toString('utf-8');
+  const secretKey = Buffer.from(base64EncodedSecret, 'base64');
+
+
+  console.log(secretKey);
   try {
+    //console.log(secretKey);
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
-    request.decodedToken = decoded; 
+    console.log(decoded);
     next(); // Continue to the next middleware or route
   } catch (error) {
     console.error('Token verification failed:', error.message);
@@ -41,12 +45,12 @@ async function comparePasswords(providedPassword, storedPassword) {
 }
 
 router.get('/login', JWTauthentication, async (request, response) => {
-  const { email, password } = request.decodedToken;
+  const {email, password } = request.body;
   try {
     const storedPassword = await getUserPassword(email);
 
     if (!storedPassword) {
-      response.status(401).send('User not found');
+      response.status(401).send(`User with email ${email} not found`);
       return;
     }
     
@@ -70,7 +74,8 @@ router.get('/login', JWTauthentication, async (request, response) => {
 
 // register route
 router.post('/register', JWTauthentication, async (request, response) => {
-const userData = request.user;
+const userData = request.body;
+console.log(userData);
 
 try{
   const addUser = await addNewUser(userData);
