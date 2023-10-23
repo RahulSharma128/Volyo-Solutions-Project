@@ -22,7 +22,6 @@ function JWTauthentication(request, response, next) {
   console.log(token);
   const secretKey = Buffer.from(base64EncodedSecret, 'base64');
   try {
-    //console.log(secretKey);
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
     next(); // Continue to the next middleware or route
   } catch (error) {
