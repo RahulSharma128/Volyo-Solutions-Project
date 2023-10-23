@@ -85,11 +85,11 @@ paths:
                 username:
                   type: string
                   description: The username of the user.
-                  example: john_doe
+                  example: mihir@gmail.com
                 password:
                   type: string
                   description: The password of the user.
-                  example: secret_password
+                  example: mihir@123
 
   /register:
     post:
@@ -97,6 +97,29 @@ paths:
       tags:
         - User Management
       description: Register a new user and add them to the system.
+      responses:
+          '201':
+            description: User created successfully
+          '400':
+            description: Bad request - User creation failed
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+          '401':
+            description: Unauthorized - Invalid or missing authentication token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+          '500':
+            description: Internal Server Error
       security:
         - BearerAuth: []  # Specify the use of the BearerAuth scheme
       requestBody:
@@ -149,28 +172,3 @@ paths:
                   format: date-time
                   description: The date and time of creation.
                   example: 2023-10-23T07:25:38.259Z
-
-
-        responses:
-          '201':
-            description: User created successfully
-          '400':
-            description: Bad request - User creation failed
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-          '401':
-            description: Unauthorized - Invalid or missing authentication token
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-          '500':
-            description: Internal Server Error

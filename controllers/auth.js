@@ -19,6 +19,7 @@ function JWTauthentication(request, response, next) {
   }
   const token = tokenParts[1];
   const base64EncodedSecret = process.env.secretKey;
+  console.log(token);
   const secretKey = Buffer.from(base64EncodedSecret, 'base64');
   try {
     //console.log(secretKey);
