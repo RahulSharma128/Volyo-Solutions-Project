@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Your API Documentation
+  version: 1.0.0
+  description: API documentation for your project
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: >-
+      Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".  
+paths:
+  /login:
+    get:
+      summary: Authenticate a user
+      tag: 
+        - Authentication
+      description: Authenticate a user and generate a JWT token.
+      responses:
+        200:
+          description: Authentication successful
+        401:
+          description: Unauthorized
+      security:
+        - BearerAuth: []  # Specify the use of the BearerAuth scheme
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+# Optionally, you can apply the security globally to all operations like this:
+# security:
+#   - BearerAuth: []
