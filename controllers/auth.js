@@ -17,18 +17,12 @@ function JWTauthentication(request, response, next) {
     console.error('Invalid authorization header');
     return response.status(401).send('Unauthorized');
   }
-
   const token = tokenParts[1];
-  console.log(token);
   const base64EncodedSecret = process.env.secretKey;
   const secretKey = Buffer.from(base64EncodedSecret, 'base64');
-
-
-  console.log(secretKey);
   try {
     //console.log(secretKey);
     const decoded = verify(token, secretKey, { algorithms: ['HS256'] });
-    console.log(decoded);
     next(); // Continue to the next middleware or route
   } catch (error) {
     console.error('Token verification failed:', error.message);

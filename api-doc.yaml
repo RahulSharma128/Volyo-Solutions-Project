@@ -3,34 +3,174 @@ info:
   title: Your API Documentation
   version: 1.0.0
   description: API documentation for your project
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
-    description: >-
-      Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".  
-paths:
-  /login:
-    get:
-      summary: Authenticate a user
-      tag: 
-        - Authentication
-      description: Authenticate a user and generate a JWT token.
-      responses:
-        200:
-          description: Authentication successful
-        401:
-          description: Unauthorized
-      security:
-        - BearerAuth: []  # Specify the use of the BearerAuth scheme
+security:
+  - BearerAuth: []  # Optionally, you can apply the security globally to all operations
+
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The username of the user.
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        partner_id:
+          type: integer
+          description: The ID of the partner associated with the user.
+        username:
+          type: string
+          description: The username of the user.
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        password:
+          type: string
+          description: The password of the user.
+        designation:
+          type: string
+          description: The designation of the user.
+        location:
+          type: string
+          description: The location of the user.
+        role:
+          type: string
+          description: The role of the user.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the user was last updated.
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the user was created
 
-# Optionally, you can apply the security globally to all operations like this:
-# security:
-#   - BearerAuth: []
+paths:
+  /login:
+    get:
+      summary: Authenticate a user
+      tags: 
+        - Authentication
+      description: Authenticate a user and generate a JWT token.
+      responses:
+        '200':
+          description: Authentication successful
+        '401':
+          description: Unauthorized
+      security:
+        - BearerAuth: []  # Specify the use of the BearerAuth scheme
+      requestBody:
+        description: User data to be authenticated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username of the user.
+                  example: john_doe
+                password:
+                  type: string
+                  description: The password of the user.
+                  example: secret_password
+
+  /register:
+    post:
+      summary: Register a new user
+      tags:
+        - User Management
+      description: Register a new user and add them to the system.
+      security:
+        - BearerAuth: []  # Specify the use of the BearerAuth scheme
+      requestBody:
+        description: User data to be registered
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: The unique identifier of the user.
+                  example: 103
+                partner_id:
+                  type: integer
+                  description: The partner ID associated with the user.
+                  example: 8955
+                username:
+                  type: string
+                  description: The username of the user.
+                  example: Rishi1
+                email:
+                  type: string
+                  description: The email address of the user.
+                  example: rishi1@gmail.com
+                password:
+                  type: string
+                  description: The password of the user.
+                  example: rishi1@123
+                designation:
+                  type: string
+                  description: The user's designation.
+                  example: chief
+                location:
+                  type: string
+                  description: The user's location.
+                  example: jaipur
+                role:
+                  type: string
+                  description: The user's role.
+                  example: creater
+                updatedAt:
+                  type: string
+                  format: date-time
+                  description: The date and time of the last update.
+                  example: 2023-10-23T07:25:38.259Z
+                createdAt:
+                  type: string
+                  format: date-time
+                  description: The date and time of creation.
+                  example: 2023-10-23T07:25:38.259Z
+
+
+        responses:
+          '201':
+            description: User created successfully
+          '400':
+            description: Bad request - User creation failed
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+          '401':
+            description: Unauthorized - Invalid or missing authentication token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+          '500':
+            description: Internal Server Error
