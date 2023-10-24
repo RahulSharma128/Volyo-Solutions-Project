@@ -36,7 +36,7 @@ async function comparePasswords(providedPassword, storedPassword) {
     throw error;
   }
 }
-
+// Define a function to login any user or admin.
 router.get('/login', JWTauthentication, async (request, response) => {
   const {email, password } = request.headers;
   try {
@@ -63,7 +63,7 @@ router.get('/login', JWTauthentication, async (request, response) => {
   }
 });
 
-// register route
+// register a partner user under a partner id with neccessay info.
 router.post('/register', JWTauthentication, async (request, response) => {
 const userData = request.body;
 try{
@@ -79,6 +79,32 @@ try{
   }
 });
 
+// Define a function to login any user or admin.
+router.get('/login', JWTauthentication, async (request, response) => {
+  const {email, password } = request.headers;
+  try {
+    const storedPassword = await getUserPassword(email);
+
+    if (!storedPassword) {
+      response.status(401).send(`User with email ${email} not found`);
+      return;
+    }
+    const passwordMatch = await comparePasswords(password, storedPassword);
+    if (passwordMatch) {
+      const userDetails = await getUserDetails(email);
+      if (userDetails) {
+        response.send(userDetails);
+      } else {
+        response.status(404).send(`User with email ${email} not found`);
+      }
+    } else {
+      response.status(401).send('Incorrect password');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    response.status(500).send('Internal Server Error');
+  }
+});
 
 module.exports = router;
 
