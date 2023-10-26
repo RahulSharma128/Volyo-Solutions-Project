@@ -2,7 +2,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const YAML = require('js-yaml');
 const fs = require('fs');
 
-const yamlFile = fs.readFileSync('./api-doc.yaml', 'utf8');
+const yamlFile = fs.readFileSync('./swagger/api-doc.yaml', 'utf8');
 const apiDoc = YAML.load(yamlFile);
 
 const options = {

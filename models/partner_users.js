@@ -28,9 +28,9 @@ const PartnerUser = sequelize.define('partner_user', {
   location: {
     type: DataTypes.STRING,
   },
-  role_id: { // Add the role_id field
-    type: DataTypes.INTEGER,
-    allowNull: true,
+  role: { // Add the role_id field
+    type: DataTypes.STRING,
+    allowNull: false,
   }
 });
 

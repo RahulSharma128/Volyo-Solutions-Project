@@ -2,21 +2,22 @@ const PartnerUser  = require('../models/partner_users'); // Import your Sequeliz
 
 const partnerUsers = [
   {
-    partner_id: 8955,
+    partner_id: 9636,
     username: 'Rishi5',
     email: 'rishi5@gmail.com',
     password: '$2a$10$q0bTudgQ1aHWfqSp/yfshuFdQdAhVd40syQZYAjK/1tyf0EUkQ55.', // Hashed password
     designation: 'chief',
     location: 'jaipur',
-    
+    role: 'approver'
   },
   {
-    partner_id: 8955,
+    partner_id: 9636,
     username: 'Mihir',
     email: 'mihir@gmail.com',
     password: '$2a$12$eIJumLmQyW0GuCg1.pG4GuePQNWyOj2gYPbngtT2RKZ5WVld47jUG', // Hashed password
     designation: 'doctor',
     location: 'location577',
+    role: 'admin'
   },
   {
     partner_id: 8955,
@@ -25,6 +26,7 @@ const partnerUsers = [
     password: '$2a$10$xcoiafm4dDVQOUadPxEZDuo1YaxkjfjxraAzDKwKGUMcs1EFuid5S', // Hashed password
     designation: 'md',
     location: 'location577',
+    role: 'admin'
   },
   {
     partner_id: 8955,
@@ -33,6 +35,7 @@ const partnerUsers = [
     password: '$2a$10$kKX6AMlcc1bhYRb3tREroOwAdlFDjVbr0gAruNk6TkSNT1/UfKc7m', // Hashed password
     designation: 'chief',
     location: 'jaipur',
+    role: 'creater'
   },
 ];
 
